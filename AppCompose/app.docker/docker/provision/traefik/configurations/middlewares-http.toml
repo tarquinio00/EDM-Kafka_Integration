@@ -1,0 +1,18 @@
+[http]
+    [http.middlewares]
+        
+        [http.middlewares.user-auth]
+            [http.middlewares.user-auth.basicAuth]
+                # Username:Password -> admin:tiguitto
+                users = ["admin:$apr1$r3puowjd$lXRESWyaLtTa8Qdt6yD.0."]
+
+        [http.middlewares.counters-app-mw]
+            [http.middlewares.counters-app-mw.stripPrefix]
+                prefixes = ["/app/cnts/be"]
+                forceSlash = false
+
+        [http.middlewares.grafana-mw]
+            [http.middlewares.grafana-mw.stripPrefix]
+                prefixes = ["/grafana"]
+                forceSlash = false
+

@@ -1,0 +1,33 @@
+# Traefik Static Configuration Reference
+# Link: https://doc.traefik.io/traefik/reference/static-configuration/file/
+
+
+[api]
+    # insecure = true
+    dashboard = true
+    debug = false
+    
+[log]
+    level = "DEBUG"
+    
+[serversTransport]
+    insecureSkipVerify = true
+
+[entryPoints]
+    [entryPoints.web]
+        address = ":80"
+        [entryPoints.web.http]
+            [entryPoints.web.http.redirections]
+                [entryPoints.web.http.redirections.entryPoint]
+                    to = "web-secure"
+                    scheme = "https"
+                    permanent = true
+
+    [entryPoints.web-secure]
+        address = ":443"
+
+[providers]
+    [providers.file]
+        directory = "/etc/traefik/configurations/"
+        watch = true
+

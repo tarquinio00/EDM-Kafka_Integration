@@ -1,0 +1,17 @@
+[[tls.certificates]]
+  # Note that since no store is defined,
+  # the certificate below will be stored in the `default` store.
+  certFile = "/certs/kauth/kauth-domain.crt"
+  keyFile = "/certs/kauth/kauth-domain.key"
+ 
+ [[tls.certificates]]
+  # Note that since no store is defined,
+  # the certificate below will be stored in the `default` store.
+  certFile = "/certs/kproxy/kproxy-domain.crt"
+  keyFile = "/certs/kproxy/kproxy-domain.key"
+  
+[[tls.certificates]]
+  # Note that since no store is defined,
+  # the certificate below will be stored in the `default` store.
+  certFile = "/certs/app/app-domain.crt"
+  keyFile = "/certs/app/app-domain.key"

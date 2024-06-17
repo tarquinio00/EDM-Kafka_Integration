@@ -1,0 +1,987 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 6,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "tDgiCNanz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "REfDate"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "X"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "MOTORI"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "TURNO A"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "TURNO B"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "TURNO C"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 19,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "normal",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "xField": "X",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "tDgiCNanz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT STR_TO_DATE( '${StartDate}', \"%Y-%m-%d\" ) as REfDate,\"INGRESSATI\" As X,SUM(Value) as A FROM counters.DailyWorkShiftCounters\r\nWHERE  WorkShift = 'A' AND DailyWorkShiftCounters.Group = 'CNTS_GLOBAL' AND DailyWorkShiftCounters.Name = 'ITEMS_IN' AND DailyWorkShiftCounters.Source = 'STAZIONE_INGRESSO_MOTORI'\r\nAND DailyWorkShiftCounters.RefDate >= '${StartDate}' AND DailyWorkShiftCounters.RefDate <= '${EndDate}'\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "tDgiCNanz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT STR_TO_DATE( '${StartDate}', \"%Y-%m-%d\" ) as REfDate,\"INGRESSATI\" As X,SUM(Value) as B FROM counters.DailyWorkShiftCounters\r\nWHERE  WorkShift = 'B' AND DailyWorkShiftCounters.Group = 'CNTS_GLOBAL' AND DailyWorkShiftCounters.Name = 'ITEMS_IN' AND DailyWorkShiftCounters.Source = 'STAZIONE_INGRESSO_MOTORI'\r\nAND DailyWorkShiftCounters.RefDate >= '${StartDate}' AND DailyWorkShiftCounters.RefDate <= '${EndDate}'\r\n",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "tDgiCNanz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT STR_TO_DATE( '${StartDate}', \"%Y-%m-%d\" ) as REfDate,\"INGRESSATI\" As X,SUM(Value) as C FROM counters.DailyWorkShiftCounters\r\nWHERE  WorkShift = 'C' AND DailyWorkShiftCounters.Group = 'CNTS_GLOBAL' AND DailyWorkShiftCounters.Name = 'ITEMS_IN' AND DailyWorkShiftCounters.Source = 'STAZIONE_INGRESSO_MOTORI'\r\nAND DailyWorkShiftCounters.RefDate >= '${StartDate}' AND DailyWorkShiftCounters.RefDate <= '${EndDate}'\r\n",
+          "refId": "C",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "TOTALE MOTORI PER TURNO - DAL $DisplayDateFrom AL $DisplayDateTo",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "transparent": true,
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "tDgiCNanz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 5,
+        "x": 19,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "tDgiCNanz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT \"INGRESSATI\" as Op , SUM(Value) FROM counters.DailyCounters\r\nWHERE  DailyCounters.Group = 'CNTS_GLOBAL' AND DailyCounters.Name = 'ITEMS_IN' AND DailyCounters.Source = 'STAZIONE_INGRESSO_MOTORI' \r\nAND DailyCounters.RefDate >= '${StartDate}' AND DailyCounters.RefDate <= '${EndDate}'\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "TOTALE MOTORI - DAL $DisplayDateFrom AL $DisplayDateTo",
+      "transformations": [
+        {
+          "id": "rowsToFields",
+          "options": {}
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "tDgiCNanz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "max": 400,
+          "min": -1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Data"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Turno A Ingressati"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "INGRESSATI TURNO A"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Turno B Ingressati"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "INGRESSATI TURNO B"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Turno C Ingressati"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "INGRESSATI TURNO C"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 12,
+        "x": 0,
+        "y": 13
+      },
+      "id": 3,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "normal",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "xField": "Data",
+        "xTickLabelRotation": 45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "tDgiCNanz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT RefDate, DATE_FORMAT(RefDate, '%d/%m') as \"Data\", Value as \"Turno A Ingressati\" \r\nFROM counters.DailyWorkShiftCounters \r\nWHERE DailyWorkShiftCounters.Group = 'CNTS_GLOBAL' AND DailyWorkShiftCounters.Name = 'ITEMS_IN' AND DailyWorkShiftCounters.Source = 'STAZIONE_INGRESSO_MOTORI'\r\nAND DailyWorkShiftCounters.RefDate >= '${StartDate}' AND DailyWorkShiftCounters.RefDate <= '${EndDate}'\r\nAND DailyWorkShiftCounters.WorkShift = 'A' order by RefDate asc;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "tDgiCNanz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT RefDate, DATE_FORMAT(RefDate, '%d/%m') as \"Data\", Value as \"Turno B Ingressati\" \r\nFROM counters.DailyWorkShiftCounters \r\nWHERE DailyWorkShiftCounters.Group = 'CNTS_GLOBAL' AND DailyWorkShiftCounters.Name = 'ITEMS_IN' AND DailyWorkShiftCounters.Source = 'STAZIONE_INGRESSO_MOTORI'\r\nAND DailyWorkShiftCounters.RefDate >= '${StartDate}' AND DailyWorkShiftCounters.RefDate <= '${EndDate}'\r\nAND DailyWorkShiftCounters.WorkShift = 'B' order by RefDate asc;",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "tDgiCNanz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT RefDate, DATE_FORMAT(RefDate, '%d/%m') as \"Data\", Value as \"Turno C Ingressati\" \r\nFROM counters.DailyWorkShiftCounters \r\nWHERE DailyWorkShiftCounters.Group = 'CNTS_GLOBAL' AND DailyWorkShiftCounters.Name = 'ITEMS_IN' AND DailyWorkShiftCounters.Source = 'STAZIONE_INGRESSO_MOTORI'\r\nAND DailyWorkShiftCounters.RefDate >= '${StartDate}' AND DailyWorkShiftCounters.RefDate <= '${EndDate}'\r\nAND DailyWorkShiftCounters.WorkShift = 'C' order by RefDate asc;",
+          "refId": "C",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "MOTORI IN INGRESSO PER GIORNO - DAL $DisplayDateFrom AL $DisplayDateTo",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "tDgiCNanz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "max": 400
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 12,
+        "x": 12,
+        "y": 13
+      },
+      "id": 5,
+      "options": {
+        "displayLabels": [
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "tDgiCNanz"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT STR_TO_DATE('${StartDate}', \"%Y-%m-%d\") as RefDate, \r\n       CONCAT('Turno: ', DailyWorkShiftCounters.WorkShift, ' - Colore: ', DailyWorkShiftCounters.Name) as turnoEcolore,\r\n       SUM(DailyWorkShiftCounters.Value) as A \r\nFROM counters.DailyWorkShiftCounters\r\nWHERE DailyWorkShiftCounters.Group = 'CNTS_COLORS'  \r\n  AND DailyWorkShiftCounters.Source = 'STAZIONE_INGRESSO_MOTORI'\r\n  AND DailyWorkShiftCounters.RefDate >= '${StartDate}' \r\n  AND DailyWorkShiftCounters.RefDate <= '${EndDate}'\r\nGROUP BY WorkShift, DailyWorkShiftCounters.Name",
+          "refId": "D",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "COLOR TEXT - DAL $DisplayDateFrom AL $DisplayDateTo",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "piechart"
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "hide": 0,
+        "label": "DATA INIZIO (DD/MM/YYYY)",
+        "name": "UserStartDate",
+        "options": [
+          {
+            "selected": true,
+            "text": "",
+            "value": ""
+          }
+        ],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "30",
+          "value": "30"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "STORICO PRODUZIONE - GIORNI:",
+        "multi": false,
+        "name": "UserDays",
+        "options": [
+          {
+            "selected": false,
+            "text": "1",
+            "value": "1"
+          },
+          {
+            "selected": false,
+            "text": "2",
+            "value": "2"
+          },
+          {
+            "selected": false,
+            "text": "3",
+            "value": "3"
+          },
+          {
+            "selected": false,
+            "text": "4",
+            "value": "4"
+          },
+          {
+            "selected": false,
+            "text": "5",
+            "value": "5"
+          },
+          {
+            "selected": false,
+            "text": "6",
+            "value": "6"
+          },
+          {
+            "selected": false,
+            "text": "7",
+            "value": "7"
+          },
+          {
+            "selected": false,
+            "text": "8",
+            "value": "8"
+          },
+          {
+            "selected": false,
+            "text": "9",
+            "value": "9"
+          },
+          {
+            "selected": false,
+            "text": "10",
+            "value": "10"
+          },
+          {
+            "selected": false,
+            "text": "11",
+            "value": "11"
+          },
+          {
+            "selected": false,
+            "text": "12",
+            "value": "12"
+          },
+          {
+            "selected": false,
+            "text": "13",
+            "value": "13"
+          },
+          {
+            "selected": false,
+            "text": "14",
+            "value": "14"
+          },
+          {
+            "selected": false,
+            "text": "15",
+            "value": "15"
+          },
+          {
+            "selected": true,
+            "text": "30",
+            "value": "30"
+          }
+        ],
+        "query": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,30",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "hide": 2,
+        "name": "MaxDays",
+        "query": "30",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "30",
+          "value": "30"
+        },
+        "datasource": {
+          "type": "mysql",
+          "uid": "tDgiCNanz"
+        },
+        "definition": "SELECT IF(${UserDays}<=${MaxDays}, ${UserDays}, ${MaxDays}); ",
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "Days",
+        "options": [],
+        "query": "SELECT IF(${UserDays}<=${MaxDays}, ${UserDays}, ${MaxDays}); ",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "12/05/2024",
+          "value": "12/05/2024"
+        },
+        "datasource": {
+          "type": "mysql",
+          "uid": "tDgiCNanz"
+        },
+        "definition": "SELECT (\nDATE_FORMAT( \"${StartDate}\" , \"%d/%m/%Y\" )\n); ",
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "DisplayDateFrom",
+        "options": [],
+        "query": "SELECT (\nDATE_FORMAT( \"${StartDate}\" , \"%d/%m/%Y\" )\n); ",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "2024-06-10",
+          "value": "2024-06-10"
+        },
+        "datasource": {
+          "type": "mysql",
+          "uid": "tDgiCNanz"
+        },
+        "definition": "SELECT CONCAT( IF(\"${UserStartDate}\"=\"\",\nCURDATE(),\nDATE_ADD(STR_TO_DATE( \"${UserStartDate}\" , \"%d/%m/%Y\" ), INTERVAL ${Days}-1 DAY)\n));",
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "EndDate",
+        "options": [],
+        "query": "SELECT CONCAT( IF(\"${UserStartDate}\"=\"\",\nCURDATE(),\nDATE_ADD(STR_TO_DATE( \"${UserStartDate}\" , \"%d/%m/%Y\" ), INTERVAL ${Days}-1 DAY)\n));",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "2024-05-12",
+          "value": "2024-05-12"
+        },
+        "datasource": {
+          "type": "mysql",
+          "uid": "tDgiCNanz"
+        },
+        "definition": "SELECT CONCAT(IF(\"${UserStartDate}\"=\"\",\nDATE_SUB(CURDATE(), INTERVAL ${Days}-1 DAY),\nSTR_TO_DATE( \"${UserStartDate}\" , \"%d/%m/%Y\" )\n)); ",
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "StartDate",
+        "options": [],
+        "query": "SELECT CONCAT(IF(\"${UserStartDate}\"=\"\",\nDATE_SUB(CURDATE(), INTERVAL ${Days}-1 DAY),\nSTR_TO_DATE( \"${UserStartDate}\" , \"%d/%m/%Y\" )\n)); ",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "10/06/2024",
+          "value": "10/06/2024"
+        },
+        "datasource": {
+          "type": "mysql",
+          "uid": "tDgiCNanz"
+        },
+        "definition": "SELECT (\nDATE_FORMAT( \"${EndDate}\" , \"%d/%m/%Y\" )\n); ",
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "DisplayDateTo",
+        "options": [],
+        "query": "SELECT (\nDATE_FORMAT( \"${EndDate}\" , \"%d/%m/%Y\" )\n); ",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": false,
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "DailyProduction",
+  "uid": "roPR5ZUSk",
+  "version": 2,
+  "weekStart": ""
+}

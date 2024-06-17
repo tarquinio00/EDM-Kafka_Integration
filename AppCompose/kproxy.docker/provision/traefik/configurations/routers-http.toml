@@ -1,0 +1,23 @@
+[http]
+    [http.routers]
+
+        [http.routers.proxy-ui-router]
+            rule = "Host(`kproxy.stage.local`)"
+            entryPoints = ["web-secure"]
+            middlewares = ["user-auth"]
+            service = "api@internal"
+        [http.routers.proxy-ui-router.tls]
+            
+        [http.routers.keycloak-router]
+            rule = "Host(`kauth.stage.local`)"
+            entryPoints = ["web-secure"]
+            service = "keycloak"
+        [http.routers.keycloak-router.tls]
+
+
+        [http.routers.traefik-app-router]
+            rule = "Host(`app.stage.local`)"
+            entryPoints = ["web-secure"]
+            service = "traefik-app"
+        [http.routers.traefik-app-router.tls]
+

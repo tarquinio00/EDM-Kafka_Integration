@@ -1,0 +1,32 @@
+version: "3.8"
+
+networks: 
+   proxy_network:
+      external: true
+
+x-logging: 
+      &default-logging
+      driver: "json-file"
+      options:
+        max-size: 100m
+        max-file: "5"
+
+services:
+  traefik:
+    image: "traefik:v3.0"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./certs:/certs"
+      # Traefik Static Configuration
+      - ./provision/traefik/traefik.toml:/etc/traefik/traefik.toml
+      # Traefik Dynamic Configuration
+      - ./provision/traefik/configurations:/etc/traefik/configurations
+    command:
+      - --providers.docker=true
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - proxy_network
+    restart: always
+

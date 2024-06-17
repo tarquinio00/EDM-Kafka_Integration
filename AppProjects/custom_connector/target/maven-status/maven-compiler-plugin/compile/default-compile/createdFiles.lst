@@ -1,0 +1,8 @@
+dev/tartar/connect/traceability/Product.class
+dev/tartar/connect/keycloakAuth/ConfidentialAuthService.class
+dev/tartar/connect/traceability/TraceabilityJsonItem.class
+dev/tartar/connect/counterApp/Counter.class
+dev/tartar/connect/CustomSinkConnectorTask.class
+dev/tartar/connect/CustomSinkConnector.class
+dev/tartar/connect/traceability/CheckListEntryItem.class
+dev/tartar/connect/CustomSinkConnectorTask$1.class

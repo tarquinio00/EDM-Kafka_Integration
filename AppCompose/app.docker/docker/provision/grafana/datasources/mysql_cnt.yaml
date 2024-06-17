@@ -1,0 +1,48 @@
+# config file version
+apiVersion: 1
+
+datasources:
+ - name: MySQL_CNT
+   type: mysql
+   access: proxy
+   orgId: 1
+   uid: tDgiCNanz
+   url: $PROVISIONING_DATASOURCE_MYSQL_DATABASE_URL
+   #password: $PROVISIONING_DATASOURCE_MYSQL_PASSWORD
+   user: $PROVISIONING_DATASOURCE_MYSQL_CNT_USER
+   typeName: MySQL
+   typeLogoUrl: public/app/plugins/datasource/mysql/img/mysql_logo.svg
+   database: $PROVISIONING_DATASOURCE_MYSQL_CNT_DATABASE_NAME
+   basicAuth: false
+   isDefault: false
+   jsonData:
+     maxIdleConns: 5
+     maxOpenConns: 10
+     tlsAuthWithCACert: true
+     tlsSkipVerify: true
+   secureJsonData:
+     password: $PROVISIONING_DATASOURCE_MYSQL_CNT_PASSWORD
+     tlsCACert: |
+       -----BEGIN CERTIFICATE-----
+       MIIDnTCCAoWgAwIBAgIUI1w63dv1R/XPPNAF5v/vgRqvxBUwDQYJKoZIhvcNAQEL
+       BQAwXjELMAkGA1UEBhMCSVQxDzANBgNVBAgMBlB1Z2xpYTEPMA0GA1UEBwwGRm9n
+       Z2lhMQ0wCwYDVQQKDARJTEFOMR4wHAYDVQQLDBVDZXJ0aWZpY2F0ZSBBdXRob3Jp
+       dHkwHhcNMjIwMjAzMTQwNjA1WhcNMzIwMjAxMTQwNjA1WjBeMQswCQYDVQQGEwJJ
+       VDEPMA0GA1UECAwGUHVnbGlhMQ8wDQYDVQQHDAZGb2dnaWExDTALBgNVBAoMBElM
+       QU4xHjAcBgNVBAsMFUNlcnRpZmljYXRlIEF1dGhvcml0eTCCASIwDQYJKoZIhvcN
+       AQEBBQADggEPADCCAQoCggEBAOBoQeZr/CGo/YUawr4oTR4QmvK0VHy96eRZzzPk
+       EOdt2/4wpAu9B+U6H9TSZd8SMLMens8kQ01G0eaIH1l0uTBFSx/FZQnaIAcOK6Y3
+       gk4pZqjas8rHIYs3BlqX0cSjd0bQ46CUwBaPVXOxpvDo5a3coFHcctgFraYTg6qe
+       L9J5JJLpv2XEh6cVB1MDoshDL0zepNgDSt/ajg+ADVWm/yUxUOrkmgkseJ/xCGoM
+       8WE5kxFBrVVwqgHPv4EHqNIfsV3TslD2vaep889SMKm79C+dy8zkeBPcM/Surv0H
+       ZQ6uSW40JLSBcuYaHFqkhTXTw/9LIKyNXNIov/8rGQmw668CAwEAAaNTMFEwHQYD
+       VR0OBBYEFHt0bK8F8T1I3fJjCn/FdB4qmIDxMB8GA1UdIwQYMBaAFHt0bK8F8T1I
+       3fJjCn/FdB4qmIDxMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEB
+       AIu2i4EZT4x+6NIfmoc2vq2p6e4udttgxbRfR28bygi42u4Pt+5yOy0cO8+WRld3
+       f5olP6iZxhYW0lmO4hzhd9XEv9mOAf4LWSQDz8tGpWPVrtx83XMIo3L9idU0a3Hh
+       EcXY9H1nbrPBVlB6w5jS0bs60AmPx1vbvABMCYtArkL9U5Sk3SmRnwBM2YDJ6kFt
+       chyjTu9Uin8Py6/DX+ab6QyTNj2AL4bB+x46r7pe9jO6E9O6AYlyQmcZjlk3GCdY
+       crxmiaKhrKGMG3MNi4T27EFRrLRW4MxPNH5rd07mSk3LN4Ryet9mVF3JS/53IrnZ
+       +OU702i6RLB0GYXHkbNijyY=
+       -----END CERTIFICATE-----
+   editable: true

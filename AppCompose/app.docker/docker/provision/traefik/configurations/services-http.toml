@@ -1,0 +1,19 @@
+[http]
+    [http.services]
+
+        [http.services.counters-app]
+            [http.services.counters-app.loadBalancer]
+                [[http.services.counters-app.loadBalancer.servers]]
+                    url = "http://counters-app"
+
+        [http.services.grafana]
+            [http.services.grafana.loadBalancer]
+                [[http.services.grafana.loadBalancer.servers]]
+                    url = "http://grafana:3000"
+                    
+        [http.routers.grafana-router]
+            rule = "PathPrefix(`/grafana`)"
+            entryPoints = ["web"]
+            middlewares = ["grafana-mw"]
+            service = "grafana"
+

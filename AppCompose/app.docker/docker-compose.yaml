@@ -1,0 +1,138 @@
+version: '3.4'
+
+volumes:
+   mysql_data:
+   mysql_traceability_data:
+   grafana_data:
+networks: 
+   mysql_network:
+   mysql_traceability_network:
+      external: true
+   proxy_internal_network:
+   proxy_network:
+      external: true
+
+x-logging: 
+      &default-logging
+      driver: "json-file"
+      options:
+        max-size: 100m
+        max-file: "5"
+
+services:
+   counters-app:
+      build:
+         context: ./docker/builds/counters-app
+      networks: 
+         - "mysql_network"
+         - "proxy_network"
+      ports:
+         - "5014:80" #debug
+      environment :
+         - ASPNETCORE_URLS=http://+:80
+         - ServicesOptions__DatabaseOptions__ConnectionString=server=mysql;user=${MYSQL_COUNTERS_USR_NAME};password=${MYSQL_COUNTERS_USR_PWD};database=${MYSQL_COUNTERS_DB_NAME}
+         - ServicesOptions__DatabaseOptions__DatabaseVersion=8.0.28
+         - JwtBearer__Authority=${SSO_AUTH_URL}/auth/realms/${DOMAIN_REALM_NAME}
+         - JwtBearer__Audience=${COUNTERS_APP_CLIENT_ID}
+         #- Logging__LogLevel__System.Net.Http.HttpClient=Information
+      labels:
+         - "traefik.enable=true"
+      depends_on:
+         - mysql
+      logging: *default-logging
+      restart: always   
+
+   mysql:
+      build:
+         context: ./docker/builds/mysql    
+      networks:
+         - "mysql_network"
+         - "mysql_traceability_network"
+      ports:
+         - "3401:3306" #debug
+      volumes:
+         - mysql_data:/var/lib/mysql
+      command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default_authentication_plugin=mysql_native_password --innodb-buffer-pool-size=1G
+      environment:
+         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+         MYSQL_COUNTERS_DB_NAME: ${MYSQL_COUNTERS_DB_NAME}
+         MYSQL_COUNTERS_USR_NAME: ${MYSQL_COUNTERS_USR_NAME}
+         MYSQL_COUNTERS_USR_PWD: ${MYSQL_COUNTERS_USR_PWD}
+         MYSQL_READER_USR_NAME: ${MYSQL_READER_USR_NAME}
+         MYSQL_READER_USR_PWD: ${MYSQL_READER_USR_PWD}
+         MYSQL_DBZ_USR_NAME: ${MYSQL_DBZ_USR_NAME}
+         MYSQL_DBZ_USR_PWD: ${MYSQL_DBZ_USR_PWD}
+
+      restart: always
+   
+   
+
+   grafana:
+      image : grafana/grafana-oss:9.2.1
+      networks: 
+         - "mysql_network"
+         - "proxy_internal_network"
+      volumes:
+         - ./docker/provision/grafana:/etc/grafana/provisioning
+         - grafana_data:/var/lib/grafana
+      environment :
+         GF_SERVER_DOMAIN: "grafana"
+         GF_SERVER_PROTOCOL: "http"
+         GF_SERVER_ROOT_URL: "https://${PRJ_SERVER_NAME}/grafana"
+         GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+         GF_SECURITY_ALLOW_EMBEDDING: "true"
+         GF_AUTH_ANONYMOUS_ENABLED : "false"
+         GF_AUTH_OAUTH_AUTO_LOGIN: "true"
+         GF_AUTH_TOKEN_ROTATION_INTERVAL_MINUTES: "3"
+         # GF_AUTH_SIGNOUT_REDIRECT_URL: "https://${PRJ_SERVER_NAME}/logout"
+         GF_AUTH_GENERIC_OAUTH_ENABLED: "true"  
+         GF_AUTH_GENERIC_OAUTH_NAME: ${GRAFANA_BTN_LOGIN}
+         GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP: "true"
+         GF_AUTH_GENERIC_OAUTH_CLIENT_ID: ${GRAFANA_NODE_CLIENT_ID}
+         GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: ${GRAFANA_NODE_CLIENT_SECRET}
+         GF_AUTH_GENERIC_OAUTH_SCOPES: profile
+         GF_AUTH_GENERIC_OAUTH_AUTH_URL: "${SSO_AUTH_URL}/auth/realms/${DOMAIN_REALM_NAME}/protocol/openid-connect/auth"
+         GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "${SSO_AUTH_URL}/auth/realms/${DOMAIN_REALM_NAME}/protocol/openid-connect/token"
+         GF_AUTH_GENERIC_OAUTH_API_URL: "${SSO_AUTH_URL}/auth/realms/${DOMAIN_REALM_NAME}/protocol/openid-connect/userinfo"
+         GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'"
+         GF_AUTH_GENERIC_OAUTH_TLS_SKIP_VERIFY_INSECURE: "true"
+         GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_STRICT: "true"
+         GF_LOG_LEVEL: ${GRAFANA_NODE_LOG_LEVEL}
+         GF_DATE_FORMATS_FULL_DATE: "DD-MM-YYYY HH:mm:ss"
+         GF_DATE_FORMATS_INTERVAL_HOUR: "DD/MM HH:mm"
+         GF_DATE_FORMATS_INTERVAL_DAY: "DD/MM"
+         GF_DATE_FORMATS_INTERVAL_MONTH: "MM-YYYY"
+         PROVISIONING_DATASOURCE_MYSQL_DATABASE_URL : "mysql:3306"
+         PROVISIONING_DATASOURCE_MYSQL_CNT_DATABASE_NAME : ${MYSQL_COUNTERS_DB_NAME}
+         PROVISIONING_DATASOURCE_MYSQL_CNT_USER : ${MYSQL_READER_USR_NAME}
+         PROVISIONING_DATASOURCE_MYSQL_CNT_PASSWORD : ${MYSQL_READER_USR_PWD}
+      labels:
+         - "traefik.enable=true"
+      depends_on:
+         - mysql
+         - traefik-app
+      logging: *default-logging
+      restart: always
+
+   traefik-app:
+      image: traefik:v2.6.0
+      networks:
+         - proxy_internal_network
+         - proxy_network
+      volumes:
+         # Traefik Static Configuration
+         - ./docker/provision/traefik/traefik.toml:/etc/traefik/traefik.toml
+         # Traefik Dynamic Configuration
+         - ./docker/provision/traefik/configurations:/etc/traefik/configurations
+         # SSL Certificates
+         # - ./certs:/etc/ssl/certs
+         # Docker Provider via Socket
+         - /var/run/docker.sock:/var/run/docker.sock:ro  
+      labels:
+         - "traefik.enable=true"
+         - "traefik.http.routers.api-router=api-router@file"
+         - "traefik.http.routers.traefik-http-router.service=api@internal"            
+      logging: *default-logging
+      restart: always
+   
+

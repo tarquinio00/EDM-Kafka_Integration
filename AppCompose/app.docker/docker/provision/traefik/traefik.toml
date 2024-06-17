@@ -1,0 +1,30 @@
+# Traefik Static Configuration Reference
+# Link: https://doc.traefik.io/traefik/reference/static-configuration/file/
+
+[global]
+    checkNewVersion = false
+    sendAnonymousUsage = true
+
+[api]
+    # insecure = true
+    dashboard = true
+    debug = false
+    
+[log]
+    level = "DEBUG"
+
+[accessLog]
+    filePath = "/log/access.log"
+    bufferingSize = 100
+    [accessLog.filters]
+        statusCodes = ["200", "300-302", "400-499"]
+        retryAttempts = true
+
+[entryPoints]
+    [entryPoints.web]
+        address = ":80"
+
+[providers]
+    [providers.file]
+        directory = "/etc/traefik/configurations/"
+        watch = true

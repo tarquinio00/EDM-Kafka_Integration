@@ -1,0 +1,12 @@
+[http]
+    [http.services]
+        [http.services.keycloak]
+            [http.services.keycloak.loadBalancer]
+                [[http.services.keycloak.loadBalancer.servers]]
+                    url = "http://keycloak:8080"
+                    
+        [http.services.traefik-app]
+            [http.services.traefik-app.loadBalancer]
+                [[http.services.traefik-app.loadBalancer.servers]]
+                    url = "http://traefik-app:80"
+

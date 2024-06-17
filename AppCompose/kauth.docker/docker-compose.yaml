@@ -1,0 +1,62 @@
+version: '3.4'
+
+volumes:
+   mysql_data:
+networks: 
+   proxy_network:
+      external: true
+   mysql_network:
+       
+x-logging: 
+      &default-logging
+      driver: "json-file"
+      options:
+        max-size: 100m
+        max-file: "5"
+
+services:
+   mysql:
+      build:
+         context: ./builds/mysql    
+      networks:
+         - "mysql_network"
+      ports:
+         - "3400:3306" #debug
+      volumes:
+         - mysql_data:/var/lib/mysql
+      command: mysqld --character-set-server=utf8mb4 --innodb-buffer-pool-size=1G --disable-log-bin
+      environment:
+         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+         MYSQL_KEYCLOAK_DB_NAME: ${MYSQL_KEYCLOAK_DB_NAME}
+         MYSQL_KEYCLOAK_USR_NAME: ${MYSQL_KEYCLOAK_USR_NAME}
+         MYSQL_KEYCLOAK_USR_PWD: ${MYSQL_KEYCLOAK_USR_PWD}     
+      restart: always
+
+
+   keycloak:
+      build:
+         context: ./builds/keycloak
+      networks: 
+         - "mysql_network"
+         - "proxy_network"
+      command: 
+         # - "-b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
+         - "-b 0.0.0.0"
+      user: "1000"
+      ports:
+         - "8080:8080"
+      environment:
+         KEYCLOAK_USER: ${KEYCLOAK_ADMIN_USER}
+         KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+         DB_VENDOR: MYSQL
+         DB_ADDR: mysql
+         DB_DATABASE: ${MYSQL_KEYCLOAK_DB_NAME}
+         DB_USER: ${MYSQL_KEYCLOAK_USR_NAME}
+         DB_PASSWORD: ${MYSQL_KEYCLOAK_USR_PWD}
+         PROXY_ADDRESS_FORWARDING: true
+         KC_PROXY: edge
+         KC_PROXY_ADDRESS_FORWARDING: true
+      depends_on:
+         - mysql
+      logging: *default-logging
+      restart: always
