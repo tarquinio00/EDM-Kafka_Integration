@@ -61,8 +61,7 @@
     <div id="kc-header" class="${properties.kcHeaderClass!}">
         <div style="display: grid; padding: 0px; text-align: center" id="kc-header-wrapper"
              class="${properties.kcHeaderWrapperClass!}">
-             <img style="margin: auto" id="kc-logomanta" class="" src="${url.resourcesPath}/img/logomanta.png">
-             MANTAGROUP
+             LOGIN
              </div>
     </div>
     <div class="${properties.kcFormCardClass!}">
