@@ -13,7 +13,7 @@ docker compose -p ${PROJECT_NAME} up -d
 
 if docker container ls | grep -q 'app-counters-app-1'; then
   echo "App Counter running... Deleting unused volumes"
-  docker volume prune -a -f
+  docker volume prune -a 
 else
   echo "App Counter is not running."
 fi
